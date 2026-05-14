@@ -2,6 +2,27 @@
   animation: ffxiv-chat-glow 1.2s ease-out;
 }
 
+.ffxiv-vtt-chat-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.ffxiv-vtt-chat-button {
+  background: rgba(255, 204, 102, 0.15);
+  border: 1px solid rgba(255, 204, 102, 0.35);
+  color: #ffd886;
+  border-radius: 0.35rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.ffxiv-vtt-chat-button:hover {
+  background: rgba(255, 204, 102, 0.25);
+}
+
 @keyframes ffxiv-chat-glow {
   from { box-shadow: 0 0 0 rgba(255, 255, 255, 0); }
   50% { box-shadow: 0 0 12px rgba(255, 200, 100, 0.55); }

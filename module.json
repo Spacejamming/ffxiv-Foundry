@@ -3,7 +3,7 @@
   "name": "ffxiv-vtt",
   "title": "FFXIV VTT",
   "description": "A Foundry VTT module for recreating features from Final Fantasy XIV.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Your Name",
   "minimumCoreVersion": "10",
   "compatibleCoreVersion": "11",
