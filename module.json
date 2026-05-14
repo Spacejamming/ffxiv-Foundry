@@ -1,12 +1,12 @@
 {
   "id": "ffxiv-vtt",
-  "name": "ffxiv-vtt",
   "title": "FFXIV VTT",
   "description": "A Foundry VTT module for recreating features from Final Fantasy XIV.",
   "version": "0.0.4",
-  "author": "Your Name",
-  "minimumCoreVersion": "10",
-  "compatibleCoreVersion": "11",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
   "url": "https://github.com/Spacejamming/ffxiv-Foundry",
   "manifest": "https://raw.githubusercontent.com/Spacejamming/ffxiv-Foundry/main/module.json",
   "download": "https://github.com/Spacejamming/ffxiv-Foundry/releases/download/v0.0.4/ffxiv-vtt.zip",
