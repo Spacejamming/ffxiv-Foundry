@@ -57,7 +57,7 @@ class FFXIVVTT {
 
   static init() {
     this.log("Initializing module");
-    this.debug("Version 0.0.3 - Init hook fired");
+    this.debug("Version 0.0.4 - Init hook fired");
     this.registerSettings();
   }
 
@@ -76,35 +76,45 @@ class FFXIVVTT {
 
     Hooks.on("getSceneControlButtons", (controls) => {
       if (!game.user.isGM) return;
-      const measure = controls.find((c) => c.name === "measure");
-      if (!measure) return;
-      measure.tools.push({
+      let group = controls.find((c) => c.name === MODULE_ID);
+      if (!group) {
+        group = {
+          name: MODULE_ID,
+          title: "FFXIV VTT",
+          icon: "fas fa-dragon",
+          visible: true,
+          tools: [],
+        };
+        controls.push(group);
+      }
+
+      group.tools.push({
         name: "registerAoE",
-        title: "Register AoE from Selected Template",
+        title: "Register AoE",
         icon: "fas fa-bullseye",
         visible: true,
         onClick: () => aoeManager.registerSelectedTemplate(),
         button: true,
       });
-      measure.tools.push({
+      group.tools.push({
         name: "selectAoE",
-        title: "Select tokens in selected AoE",
+        title: "Select Tokens",
         icon: "fas fa-mouse-pointer",
         visible: true,
         onClick: () => aoeManager.selectTokensInAoE(),
         button: true,
       });
-      measure.tools.push({
+      group.tools.push({
         name: "toggleAoEAuras",
-        title: "Toggle AoE token auras",
+        title: "Toggle AoE Auras",
         icon: "fas fa-eye",
         visible: true,
         onClick: () => aoeManager.toggleTokenAuras(),
         button: true,
       });
-      measure.tools.push({
+      group.tools.push({
         name: "toggleAoEVisibility",
-        title: "Toggle AoE visibility",
+        title: "Toggle AoE Visibility",
         icon: "fas fa-low-vision",
         visible: true,
         onClick: () => aoeManager.toggleAoEVisibility(),
