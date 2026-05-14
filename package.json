@@ -5,7 +5,9 @@
   "main": "module.json",
   "scripts": {
     "build": "echo \"No build step defined. Use plain ES module source.\"",
-    "watch": "echo \"No watch step defined.\""
+    "watch": "echo \"No watch step defined.\"",
+    "package": "powershell -NoProfile -Command \"Remove-Item -Force ffxiv-vtt.zip -ErrorAction SilentlyContinue; Compress-Archive -Path module.json, package.json, README.md, scripts, styles -DestinationPath ffxiv-vtt.zip -Force\"",
+    "release": "npm run package"
   },
   "author": "",
   "license": "MIT",
