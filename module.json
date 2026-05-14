@@ -1,4 +1,5 @@
 {
+  "id": "ffxiv-vtt",
   "name": "ffxiv-vtt",
   "title": "FFXIV VTT",
   "description": "A Foundry VTT module for recreating features from Final Fantasy XIV.",
