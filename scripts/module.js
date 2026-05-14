@@ -9,7 +9,9 @@ class FFXIVVTT {
   }
 
   static debug(msg) {
-    console.debug(`[FFXIV VTT DEBUG] ${msg}`);
+    if (game.settings.get(MODULE_ID, "debug")) {
+        console.debug(`[FFXIV VTT DEBUG] ${msg}`);
+    }
   }
 
   static registerSettings() {
@@ -53,12 +55,25 @@ class FFXIVVTT {
       type: String,
       default: "0xffcc66",
     });
+
+    game.settings.register(MODULE_ID, "debug", {
+        name: "Enable Debug Logging",
+        hint: "Enable debug logging to the console for troubleshooting.",
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: false,
+    });
   }
 
   static init() {
     this.log("Initializing module");
-    this.debug("Version 0.0.4 - Init hook fired");
     this.registerSettings();
+    this.debug(`Version 0.0.8 - Init hook fired`);
+
+    Hooks.on("getSceneControlButtons", (controls) => {
+      FFXIVVTT.addSceneControls(controls);
+    });
   }
 
   static ready() {
@@ -71,58 +86,62 @@ class FFXIVVTT {
     Hooks.on("renderChatMessage", (message, html) => {
       if (!game.settings.get(MODULE_ID, "enableEffects")) return;
       html.addClass("ffxiv-vtt-chat-effect");
-      this._injectAoEChatButtons(message, html);
+      FFXIVVTT._injectAoEChatButtons(message, html);
+    });
+  }
+
+  static addSceneControls(controls) {
+    if (!game.user.isGM) return;
+
+    this.debug("getSceneControlButtons hook fired. Adding FFXIV VTT controls.");
+
+    const ffxivGroup = {
+      name: MODULE_ID,
+      title: "FFXIV VTT",
+      icon: "fas fa-dragon",
+      layer: "ffxiv",
+      visible: true,
+      tools: [],
+    };
+
+    ffxivGroup.tools.push({
+      name: "registerAoE",
+      title: "Register AoE",
+      icon: "fas fa-bullseye",
+      visible: true,
+      onClick: () => aoeManager.registerSelectedTemplate(),
+      button: true,
     });
 
-    Hooks.on("getSceneControlButtons", (controls) => {
-      if (!game.user.isGM) return;
-
-      let targetGroup = controls.find((c) => c.name === "measure");
-      if (!targetGroup) {
-        // If "measure" group not found, create a new group for FFXIV VTT tools
-        targetGroup = {
-          name: MODULE_ID,
-          title: "FFXIV VTT",
-          icon: "fas fa-dragon",
-          visible: true,
-          tools: [],
-        };
-        controls.push(targetGroup);
-      }
-
-      targetGroup.tools.push({
-        name: "registerAoE",
-        title: "Register AoE",
-        icon: "fas fa-bullseye",
-        visible: true,
-        onClick: () => aoeManager.registerSelectedTemplate(),
-        button: true,
-      });
-      targetGroup.tools.push({
-        name: "selectAoE",
-        title: "Select Tokens in AoE",
-        icon: "fas fa-mouse-pointer",
-        visible: true,
-        onClick: () => aoeManager.selectTokensInAoE(),
-        button: true,
-      });
-      targetGroup.tools.push({
-        name: "toggleAoEAuras",
-        title: "Toggle AoE Auras",
-        icon: "fas fa-eye",
-        visible: true,
-        onClick: () => aoeManager.toggleTokenAuras(),
-        button: true,
-      });
-      targetGroup.tools.push({
-        name: "toggleAoEVisibility",
-        title: "Toggle AoE Visibility",
-        icon: "fas fa-low-vision",
-        visible: true,
-        onClick: () => aoeManager.toggleAoEVisibility(),
-        button: true,
-      });
+    ffxivGroup.tools.push({
+      name: "selectAoE",
+      title: "Select Tokens in AoE",
+      icon: "fas fa-mouse-pointer",
+      visible: true,
+      onClick: () => aoeManager.selectTokensInAoE(),
+      button: true,
     });
+
+    ffxivGroup.tools.push({
+      name: "toggleAoEAuras",
+      title: "Toggle AoE Auras",
+      icon: "fas fa-eye",
+      visible: true,
+      onClick: () => aoeManager.toggleTokenAuras(),
+      button: true,
+    });
+
+    ffxivGroup.tools.push({
+      name: "toggleAoEVisibility",
+      title: "Toggle AoE Visibility",
+      icon: "fas fa-low-vision",
+      visible: true,
+      onClick: () => aoeManager.toggleAoEVisibility(),
+      button: true,
+    });
+
+    controls.push(ffxivGroup);
+    this.debug("Successfully added FFXIV VTT control group.");
   }
 
   static _injectAoEChatButtons(message, html) {
