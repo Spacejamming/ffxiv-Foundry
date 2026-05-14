@@ -16,7 +16,7 @@ The module provides comprehensive AoE management tools for Dungeon Masters to cr
 
 #### DM Controls (Scene Controls Panel)
 
-When enabled in a world, GMs will see additional tools in the **Measurement** control group with the following AoE tools:
+When enabled in a world, GMs will see additional tools in the **Measurement** control group. If the Measurement control group is not available, a new **FFXIV VTT** control group will be created with the following AoE tools:
 
 - **Register AoE** (🎯): Convert a selected measured template into an active AoE
 - **Select Tokens in AoE** (👆): Select all tokens currently inside the selected AoE
@@ -46,7 +46,7 @@ When a spell or item with AoE data is used in chat, GMs will see action buttons 
 
 1. **Create a Template**: Use Foundry's built-in template tools to create a Circle, Rectangle, Cone, or Ray template on the canvas
 
-2. **Register as AoE**: Select the template, then click the "Register AoE" button in the **Measurement tools**
+2. **Register as AoE**: Select the template, then click the "Register AoE" button in the **Measurement tools** (or the FFXIV VTT tools if measurement tools are not present)
 
 3. **Manage Tokens**: Use "Select Tokens" to automatically select all tokens inside the AoE
 
@@ -72,7 +72,7 @@ Future updates will include automatic AoE creation from DnD5e spells with AoE ef
 
 ## Troubleshooting
 
-- **No DM controls visible**: Ensure you're logged in as a GM and the module is enabled in world settings. The AoE tools appear in the Measurement control group.
+- **No DM controls visible**: Ensure you're logged in as a GM and the module is enabled in world settings. The AoE tools appear in the Measurement control group, or in their own FFXIV VTT group if the Measurement tools are not present.
 - **Templates not registering**: Make sure you have a measured template selected before clicking "Register AoE"
 - **Auras not showing**: Check that "Display AoE token auras" is enabled in module settings
 - **Chat buttons missing**: Ensure the chat message contains DnD5e item data with AoE flags (future feature)

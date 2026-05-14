@@ -76,10 +76,21 @@ class FFXIVVTT {
 
     Hooks.on("getSceneControlButtons", (controls) => {
       if (!game.user.isGM) return;
-      let group = controls.find((c) => c.name === "measure");
-      if (!group) return; // Measurement tools not found
 
-      group.tools.push({
+      let targetGroup = controls.find((c) => c.name === "measure");
+      if (!targetGroup) {
+        // If "measure" group not found, create a new group for FFXIV VTT tools
+        targetGroup = {
+          name: MODULE_ID,
+          title: "FFXIV VTT",
+          icon: "fas fa-dragon",
+          visible: true,
+          tools: [],
+        };
+        controls.push(targetGroup);
+      }
+
+      targetGroup.tools.push({
         name: "registerAoE",
         title: "Register AoE",
         icon: "fas fa-bullseye",
@@ -87,7 +98,7 @@ class FFXIVVTT {
         onClick: () => aoeManager.registerSelectedTemplate(),
         button: true,
       });
-      group.tools.push({
+      targetGroup.tools.push({
         name: "selectAoE",
         title: "Select Tokens in AoE",
         icon: "fas fa-mouse-pointer",
@@ -95,7 +106,7 @@ class FFXIVVTT {
         onClick: () => aoeManager.selectTokensInAoE(),
         button: true,
       });
-      group.tools.push({
+      targetGroup.tools.push({
         name: "toggleAoEAuras",
         title: "Toggle AoE Auras",
         icon: "fas fa-eye",
@@ -103,7 +114,7 @@ class FFXIVVTT {
         onClick: () => aoeManager.toggleTokenAuras(),
         button: true,
       });
-      group.tools.push({
+      targetGroup.tools.push({
         name: "toggleAoEVisibility",
         title: "Toggle AoE Visibility",
         icon: "fas fa-low-vision",
