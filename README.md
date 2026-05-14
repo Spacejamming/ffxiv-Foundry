@@ -2,14 +2,9 @@
 
 A Foundry VTT module for recreating features from Final Fantasy XIV.
 
-## Setup
+## Installation
 
-1. Copy the module folder into your Foundry `Data/modules/` directory.
-2. Activate the module in the Foundry Module Management screen.
-
-### Optional manifest install
-
-If you want to install via Foundry's manifest URL, use:
+Install the module in Foundry using the manifest URL:
 
 `https://raw.githubusercontent.com/Spacejamming/ffxiv-Foundry/main/module.json`
 
