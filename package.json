@@ -1,0 +1,13 @@
+{
+  "name": "ffxiv-vtt",
+  "version": "0.0.1",
+  "description": "Foundry VTT module for recreating features from Final Fantasy XIV.",
+  "main": "module.json",
+  "scripts": {
+    "build": "echo \"No build step defined. Use plain ES module source.\"",
+    "watch": "echo \"No watch step defined.\""
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {}
+}
