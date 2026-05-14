@@ -27,19 +27,11 @@ jobs:
           zip -r ffxiv-vtt.zip module.json package.json README.md scripts styles
 
       - name: Create or update GitHub release
-        id: release
-        uses: peter-evans/create-or-update-release@v4
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag != '' && github.event.inputs.tag || github.ref_name }}
           release_name: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag != '' && github.event.inputs.tag || github.ref_name }}
           body: "Automated release for ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag != '' && github.event.inputs.tag || github.ref_name }}"
           draft: false
           prerelease: false
-
-      - name: Upload release asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: ./ffxiv-vtt.zip
-          asset_name: ffxiv-vtt.zip
-          asset_content_type: application/zip
+          files: ./ffxiv-vtt.zip
