@@ -76,17 +76,8 @@ class FFXIVVTT {
 
     Hooks.on("getSceneControlButtons", (controls) => {
       if (!game.user.isGM) return;
-      let group = controls.find((c) => c.name === MODULE_ID);
-      if (!group) {
-        group = {
-          name: MODULE_ID,
-          title: "FFXIV VTT",
-          icon: "fas fa-dragon",
-          visible: true,
-          tools: [],
-        };
-        controls.push(group);
-      }
+      let group = controls.find((c) => c.name === "measure");
+      if (!group) return; // Measurement tools not found
 
       group.tools.push({
         name: "registerAoE",
@@ -98,7 +89,7 @@ class FFXIVVTT {
       });
       group.tools.push({
         name: "selectAoE",
-        title: "Select Tokens",
+        title: "Select Tokens in AoE",
         icon: "fas fa-mouse-pointer",
         visible: true,
         onClick: () => aoeManager.selectTokensInAoE(),
