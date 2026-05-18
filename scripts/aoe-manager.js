@@ -2,39 +2,33 @@ const MODULE_ID = "ffxiv-vtt";
 
 export class FFXIVAoeManager {
   constructor() {
-    this.aoes = new Map();
     this.showAuras = game.settings.get(MODULE_ID, "displayAoEauras");
   }
 
   init() {
     // We hook into refresh to draw our custom graphics whenever the template updates
     Hooks.on("refreshMeasuredTemplate", (template) => {
-      if (this.aoes.has(template.id) && this.showAuras) {
+      // Check Document Flag instead of a local map, ensuring all players see it
+      if (template.document.getFlag(MODULE_ID, "isAoe") && this.showAuras) {
         this._drawFFXIVGraphic(template);
       } else {
         this._clearFFXIVGraphic(template);
       }
     });
-
-    Hooks.on("deleteMeasuredTemplate", (document) => {
-      this.aoes.delete(document.id);
-    });
   }
 
-  _registerTemplate(template) {
+  async _registerTemplate(template) {
     if (!game.user.isGM) return;
     if (!template) return;
-    const id = template.id;
-    if (this.aoes.has(id)) return;
+    if (template.document.getFlag(MODULE_ID, "isAoe")) return;
     
-    this.aoes.set(id, { id });
-    template.refresh(); // Trigger the refresh hook to draw
+    // Set the flag on the document, this automatically syncs across the network
+    await template.document.setFlag(MODULE_ID, "isAoe", true);
   }
 
-  _unregisterTemplate(template) {
+  async _unregisterTemplate(template) {
     if (!template) return;
-    this.aoes.delete(template.id);
-    template.refresh();
+    await template.document.unsetFlag(MODULE_ID, "isAoe");
   }
 
   _getSelectedTemplate() {
@@ -42,14 +36,14 @@ export class FFXIVAoeManager {
     return selected ?? null;
   }
 
-  registerSelectedTemplate() {
+  async registerSelectedTemplate() {
     const template = this._getSelectedTemplate();
     if (!template) {
       ui.notifications.warn("Select an existing template to register it as an AoE.");
       return null;
     }
-    this._registerTemplate(template);
-    ui.notifications.info("FFXIV AoE registered.");
+    await this._registerTemplate(template);
+    ui.notifications.info("FFXIV AoE registered and synced to players.");
     return template;
   }
 
@@ -59,7 +53,7 @@ export class FFXIVAoeManager {
       ui.notifications.warn("Select the AoE template to toggle visibility.");
       return;
     }
-    if (!this.aoes.has(template.id)) {
+    if (!template.document.getFlag(MODULE_ID, "isAoe")) {
       ui.notifications.warn("This template is not registered as an AoE.");
       return;
     }
@@ -122,6 +116,12 @@ export class FFXIVAoeManager {
     if (!graphic) {
       graphic = new PIXI.Graphics();
       graphic.name = "ffxiv-vtt-aoe-aura";
+      
+      // Apply the Fog of War / Vision mask so it hides behind walls
+      if (canvas.masks?.vision) {
+          graphic.mask = canvas.masks.vision;
+      }
+      
       // Add beneath the standard template graphics
       template.addChildAt(graphic, 0);
       template._ffxivGraphic = graphic;
@@ -171,7 +171,7 @@ export class FFXIVAoeManager {
     switch (action) {
       case "place":
         if (!template) return ui.notifications.warn("Select a template before placing the AoE.");
-        this._registerTemplate(template);
+        await this._registerTemplate(template);
         ui.notifications.info("Telegraphed AoE placed from chat item.");
         break;
       case "select":
