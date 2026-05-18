@@ -11,7 +11,11 @@
   "manifest": "https://raw.githubusercontent.com/Spacejamming/ffxiv-Foundry/main/module.json",
   "download": "https://github.com/Spacejamming/ffxiv-Foundry/releases/download/v0.1.4/ffxiv-vtt.zip",
   "license": "MIT",
-  "esmodules": ["scripts/module.js"],
-  "styles": ["styles/module.css"],
+  "esmodules": [
+    "scripts/module.js"
+  ],
+  "styles": [
+    "styles/module.css"
+  ],
   "packs": []
 }

@@ -1,13 +1,15 @@
 {
   "name": "ffxiv-vtt",
-  "version": "0.0.1",
+  "version": "0.1.4",
   "description": "Foundry VTT module for recreating features from Final Fantasy XIV.",
   "main": "module.json",
   "scripts": {
     "build": "echo \"No build step defined. Use plain ES module source.\"",
     "watch": "echo \"No watch step defined.\"",
     "package": "powershell -NoProfile -Command \"Remove-Item -Force ffxiv-vtt.zip -ErrorAction SilentlyContinue; Compress-Archive -Path module.json, package.json, README.md, scripts, styles -DestinationPath ffxiv-vtt.zip -Force\"",
-    "release": "npm run package"
+    "release": "npm run package",
+    "version": "node update-version.js && git add module.json scripts/module.js",
+    "postversion": "git push origin main && git push --tags"
   },
   "author": "",
   "license": "MIT",

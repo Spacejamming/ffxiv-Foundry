@@ -1,7 +1,7 @@
 import { FFXIVAoeManager } from "./aoe-manager.js";
 
 export const MODULE_ID = "ffxiv-vtt";
-export const MODULE_VERSION = "0.1.3";
+export const MODULE_VERSION = "0.1.4";
 let aoeManager;
 
 class FFXIVVTT {
@@ -100,23 +100,24 @@ class FFXIVVTT {
     if (!game.user.isGM) return;
 
     this.debug("getSceneControlButtons hook fired. Adding FFXIV VTT controls.");
-    this.debug(`Existing control groups: ${controls.map((c) => c.name).join(", ")}`);
+    this.debug(`Existing control groups: ${Object.keys(controls).join(", ")}`);
 
-    let targetGroup = controls.find((c) => c.name === MODULE_ID);
+    let targetGroup = controls[MODULE_ID];
     if (!targetGroup) {
       this.debug("Creating dedicated FFXIV VTT control group.");
       targetGroup = {
         name: MODULE_ID,
         title: "FFXIV VTT",
         icon: "fas fa-dragon",
+        layer: "tokens",
         visible: true,
-        tools: [],
+        tools: {},
       };
-      controls.push(targetGroup);
+      controls[MODULE_ID] = targetGroup;
     }
 
-    const tools = [
-      {
+    const tools = {
+      registerAoE: {
         name: "registerAoE",
         title: "Register AoE",
         icon: "fas fa-bullseye",
@@ -124,7 +125,7 @@ class FFXIVVTT {
         onClick: () => aoeManager.registerSelectedTemplate(),
         button: true,
       },
-      {
+      selectAoE: {
         name: "selectAoE",
         title: "Select Tokens in AoE",
         icon: "fas fa-mouse-pointer",
@@ -132,7 +133,7 @@ class FFXIVVTT {
         onClick: () => aoeManager.selectTokensInAoE(),
         button: true,
       },
-      {
+      toggleAoEAuras: {
         name: "toggleAoEAuras",
         title: "Toggle AoE Auras",
         icon: "fas fa-eye",
@@ -140,23 +141,23 @@ class FFXIVVTT {
         onClick: () => aoeManager.toggleTokenAuras(),
         button: true,
       },
-      {
+      toggleAoEVisibility: {
         name: "toggleAoEVisibility",
         title: "Toggle AoE Visibility",
         icon: "fas fa-low-vision",
         visible: true,
         onClick: () => aoeManager.toggleAoEVisibility(),
         button: true,
-      },
-    ];
-
-    tools.forEach((tool) => {
-      if (!targetGroup.tools.some((existing) => existing.name === tool.name)) {
-        targetGroup.tools.push(tool);
       }
-    });
+    };
 
-    this.debug(`FFXIV VTT controls group now contains: ${targetGroup.tools.map((tool) => tool.name).join(", ")}`);
+    for (const [key, tool] of Object.entries(tools)) {
+      if (!targetGroup.tools[key]) {
+        targetGroup.tools[key] = tool;
+      }
+    }
+
+    this.debug(`FFXIV VTT controls group now contains: ${Object.keys(targetGroup.tools).join(", ")}`);
   }
 
   static _injectAoEChatButtons(message, html) {
