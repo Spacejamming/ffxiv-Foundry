@@ -4,6 +4,10 @@ export const MODULE_ID = "ffxiv-vtt";
 let aoeManager;
 
 class FFXIVVTT {
+  static get version() {
+    return game.modules.get(MODULE_ID)?.data?.version ?? "unknown";
+  }
+
   static log(...args) {
     console.log(`FFXIV VTT |`, ...args);
   }
@@ -69,9 +73,8 @@ class FFXIVVTT {
   static init() {
     this.log("Initializing module");
     this.registerSettings();
-    this.log(`Version 0.1.0 - Init hook fired`);
-    this.debug(`Version 0.1.0 - DEBUG mode enabled`);
-
+    this.log(`Version ${this.version} - Init hook fired`);
+    this.debug(`Version ${this.version} - DEBUG mode enabled`);
 
     Hooks.on("getSceneControlButtons", (controls) => {
       FFXIVVTT.addSceneControls(controls);
