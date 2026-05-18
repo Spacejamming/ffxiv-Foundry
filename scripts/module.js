@@ -1,11 +1,12 @@
 import { FFXIVAoeManager } from "./aoe-manager.js";
 
 export const MODULE_ID = "ffxiv-vtt";
+export const MODULE_VERSION = "0.1.3";
 let aoeManager;
 
 class FFXIVVTT {
   static get version() {
-    return game.modules.get(MODULE_ID)?.data?.version ?? "unknown";
+    return game.modules.get(MODULE_ID)?.data?.version ?? MODULE_VERSION;
   }
 
   static log(...args) {
@@ -99,12 +100,11 @@ class FFXIVVTT {
     if (!game.user.isGM) return;
 
     this.debug("getSceneControlButtons hook fired. Adding FFXIV VTT controls.");
+    this.debug(`Existing control groups: ${controls.map((c) => c.name).join(", ")}`);
 
-    let targetGroup = controls.find((c) => c.name === "measure");
-    if (targetGroup) {
-      this.debug("Found existing measurement controls group. Adding FFXIV tools there.");
-    } else {
-      this.debug("Measurement controls group not found. Creating FFXIV VTT group.");
+    let targetGroup = controls.find((c) => c.name === MODULE_ID);
+    if (!targetGroup) {
+      this.debug("Creating dedicated FFXIV VTT control group.");
       targetGroup = {
         name: MODULE_ID,
         title: "FFXIV VTT",
@@ -151,8 +151,13 @@ class FFXIVVTT {
       },
     ];
 
-    tools.forEach((tool) => targetGroup.tools.push(tool));
-    this.debug("Successfully added FFXIV VTT controls to the scene controls.");
+    tools.forEach((tool) => {
+      if (!targetGroup.tools.some((existing) => existing.name === tool.name)) {
+        targetGroup.tools.push(tool);
+      }
+    });
+
+    this.debug(`FFXIV VTT controls group now contains: ${targetGroup.tools.map((tool) => tool.name).join(", ")}`);
   }
 
   static _injectAoEChatButtons(message, html) {
