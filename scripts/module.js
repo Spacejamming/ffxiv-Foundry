@@ -102,9 +102,9 @@ class FFXIVVTT {
     this.debug("getSceneControlButtons hook fired. Adding FFXIV VTT controls.");
     this.debug(`Existing control groups: ${Object.keys(controls).join(", ")}`);
 
-    let targetGroup = controls["measure"];
+    let targetGroup = controls["templates"];
     if (!targetGroup) {
-      this.debug("Template Controls (measure) group not found.");
+      this.debug("Template Controls (templates) group not found.");
       return;
     }
 
