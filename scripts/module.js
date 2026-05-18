@@ -69,7 +69,9 @@ class FFXIVVTT {
   static init() {
     this.log("Initializing module");
     this.registerSettings();
-    this.debug(`Version 0.0.8 - Init hook fired`);
+    this.log(`Version 0.1.0 - Init hook fired`);
+    this.debug(`Version 0.1.0 - DEBUG mode enabled`);
+
 
     Hooks.on("getSceneControlButtons", (controls) => {
       FFXIVVTT.addSceneControls(controls);
