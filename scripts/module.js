@@ -109,7 +109,7 @@ class FFXIVVTT {
         name: MODULE_ID,
         title: "FFXIV VTT",
         icon: "fas fa-dragon",
-        layer: "tokens",
+        layer: "templates",
         visible: true,
         tools: {},
       };
