@@ -1,7 +1,7 @@
 import { FFXIVAoeManager } from "./aoe-manager.js";
 
 export const MODULE_ID = "ffxiv-vtt";
-export const MODULE_VERSION = "0.1.7";
+export const MODULE_VERSION = "0.1.8";
 let aoeManager;
 
 class FFXIVVTT {

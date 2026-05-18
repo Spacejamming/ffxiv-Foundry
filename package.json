@@ -1,6 +1,6 @@
 {
   "name": "ffxiv-vtt",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Foundry VTT module for recreating features from Final Fantasy XIV.",
   "main": "module.json",
   "scripts": {
