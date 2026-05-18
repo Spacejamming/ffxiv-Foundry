@@ -81,8 +81,11 @@ export class FFXIVAoeManager {
       return;
     }
     
+    // Switch to the Token Layer so selection is permitted by Foundry
+    canvas.tokens.activate();
+    
     // Release current tokens and select the new ones
-    canvas.tokens.controlled.forEach((token) => token.release());
+    canvas.tokens.releaseAll();
     contained.forEach((token) => token.control({ releaseOthers: false }));
     ui.notifications.info(`${contained.length} token(s) selected inside AoE.`);
   }
