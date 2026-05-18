@@ -102,18 +102,10 @@ class FFXIVVTT {
     this.debug("getSceneControlButtons hook fired. Adding FFXIV VTT controls.");
     this.debug(`Existing control groups: ${Object.keys(controls).join(", ")}`);
 
-    let targetGroup = controls[MODULE_ID];
+    let targetGroup = controls["measure"];
     if (!targetGroup) {
-      this.debug("Creating dedicated FFXIV VTT control group.");
-      targetGroup = {
-        name: MODULE_ID,
-        title: "FFXIV VTT",
-        icon: "fas fa-dragon",
-        layer: "templates",
-        visible: true,
-        tools: {},
-      };
-      controls[MODULE_ID] = targetGroup;
+      this.debug("Template Controls (measure) group not found.");
+      return;
     }
 
     const tools = {
