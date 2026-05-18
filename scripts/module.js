@@ -97,52 +97,59 @@ class FFXIVVTT {
 
     this.debug("getSceneControlButtons hook fired. Adding FFXIV VTT controls.");
 
-    const ffxivGroup = {
-      name: MODULE_ID,
-      title: "FFXIV VTT",
-      icon: "fas fa-dragon",
-      visible: true,
-      tools: [],
-    };
+    let targetGroup = controls.find((c) => c.name === "measure");
+    if (targetGroup) {
+      this.debug("Found existing measurement controls group. Adding FFXIV tools there.");
+    } else {
+      this.debug("Measurement controls group not found. Creating FFXIV VTT group.");
+      targetGroup = {
+        name: MODULE_ID,
+        title: "FFXIV VTT",
+        icon: "fas fa-dragon",
+        layer: "TokenLayer",
+        visible: true,
+        tools: [],
+      };
+      controls.push(targetGroup);
+    }
 
-    ffxivGroup.tools.push({
-      name: "registerAoE",
-      title: "Register AoE",
-      icon: "fas fa-bullseye",
-      visible: true,
-      onClick: () => aoeManager.registerSelectedTemplate(),
-      button: true,
-    });
+    const tools = [
+      {
+        name: "registerAoE",
+        title: "Register AoE",
+        icon: "fas fa-bullseye",
+        visible: true,
+        onClick: () => aoeManager.registerSelectedTemplate(),
+        button: true,
+      },
+      {
+        name: "selectAoE",
+        title: "Select Tokens in AoE",
+        icon: "fas fa-mouse-pointer",
+        visible: true,
+        onClick: () => aoeManager.selectTokensInAoE(),
+        button: true,
+      },
+      {
+        name: "toggleAoEAuras",
+        title: "Toggle AoE Auras",
+        icon: "fas fa-eye",
+        visible: true,
+        onClick: () => aoeManager.toggleTokenAuras(),
+        button: true,
+      },
+      {
+        name: "toggleAoEVisibility",
+        title: "Toggle AoE Visibility",
+        icon: "fas fa-low-vision",
+        visible: true,
+        onClick: () => aoeManager.toggleAoEVisibility(),
+        button: true,
+      },
+    ];
 
-    ffxivGroup.tools.push({
-      name: "selectAoE",
-      title: "Select Tokens in AoE",
-      icon: "fas fa-mouse-pointer",
-      visible: true,
-      onClick: () => aoeManager.selectTokensInAoE(),
-      button: true,
-    });
-
-    ffxivGroup.tools.push({
-      name: "toggleAoEAuras",
-      title: "Toggle AoE Auras",
-      icon: "fas fa-eye",
-      visible: true,
-      onClick: () => aoeManager.toggleTokenAuras(),
-      button: true,
-    });
-
-    ffxivGroup.tools.push({
-      name: "toggleAoEVisibility",
-      title: "Toggle AoE Visibility",
-      icon: "fas fa-low-vision",
-      visible: true,
-      onClick: () => aoeManager.toggleAoEVisibility(),
-      button: true,
-    });
-
-    controls.push(ffxivGroup);
-    this.debug("Successfully added FFXIV VTT control group.");
+    tools.forEach((tool) => targetGroup.tools.push(tool));
+    this.debug("Successfully added FFXIV VTT controls to the scene controls.");
   }
 
   static _injectAoEChatButtons(message, html) {
